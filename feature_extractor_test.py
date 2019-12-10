@@ -6,7 +6,7 @@ from model_factory import CFG_FEATURES, CFG_LANG
 import pandas as pd
 
 from feature_extractor.extractor_facade import FeatureExtractor
-
+from feature_extractor.extractor_length import ExtractorLength
 from feature_extractor.extractor_sentiment import ExtractorSentiment
 from feature_extractor.extractor_linguistic import ExtractorLinguistic
 from feature_extractor.extractor_bow import ExtractorBow
