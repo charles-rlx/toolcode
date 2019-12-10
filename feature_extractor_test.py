@@ -67,8 +67,8 @@ feature_vector.update(result_length)
 # 	tweet_vector = FeatureExtractor(cfg["irrelevant"], "en", tweet)
 # 	tweet_vectors = tweet_vectors.append(tweet_vector.data_vector)
 
-data_reader = pd.read_csv('../data/trainingset_450.csv', encoding = "utf-8")
-# data_reader = pd.read_csv('../data/trainingset_450_test.csv', encoding = "utf-8")
+#process raw data to get features
+data_reader = pd.read_csv('../Data/raw_trainingset.csv', encoding = "utf-8")
 print(data_reader)
 print(data_reader['text'][0])
 tweet_vectors = pd.DataFrame()
@@ -81,7 +81,7 @@ for index, row in data_reader.iterrows():
 
 tweet_vectors = tweet_vectors.reset_index(drop=True)
 print(tweet_vectors)
-tweet_vectors.to_csv('result_vectors.csv')
+tweet_vectors.to_csv('trainingset.csv')
 
 
 
