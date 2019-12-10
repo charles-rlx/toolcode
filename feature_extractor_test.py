@@ -68,7 +68,7 @@ feature_vector.update(result_length)
 # 	tweet_vectors = tweet_vectors.append(tweet_vector.data_vector)
 
 #process raw data to get features
-data_reader = pd.read_csv('../Data/raw_trainingset.csv', encoding = "utf-8")
+data_reader = pd.read_csv('../data/raw_trainingset.csv', encoding = "utf-8")
 print(data_reader)
 print(data_reader['text'][0])
 tweet_vectors = pd.DataFrame()
