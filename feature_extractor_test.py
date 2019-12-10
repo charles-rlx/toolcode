@@ -50,6 +50,10 @@ data_vector = pd.DataFrame([feature_vector], columns=feature_vector.keys())
 print("##########data vectora####################")
 print(data_vector)
 
+#length
+result_length =  ExtractorLength.extract('en', {"processed_tweet":"This is a good app!"}, cfg["irrelevant"][CFG_FEATURES]["length"])
+print(result_length)
+feature_vector.update(result_length)
 
 #combine
 dataset = [
