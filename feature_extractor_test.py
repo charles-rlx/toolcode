@@ -52,25 +52,36 @@ print(data_vector)
 
 #length
 result_length =  ExtractorLength.extract('en', {"processed_tweet":"This is a good app!"}, cfg["irrelevant"][CFG_FEATURES]["length"])
-print(result_length)
+print(result_length["processed_tweet_length"])
 feature_vector.update(result_length)
 
 #combine
-dataset = [
-        {"text": "@Op1 buongiorno ho scritto ieri un dm nessuna risposta!"},
-        {"text": "@Op1 voglio dire grazie pubblicamente al vostro operatore xxxxxxx (lavorava ieri pomer.) che in due minuti ha risolto tutto. Tks"},
-        {"text": "@Op1 buongiorno sto partendo per le Grecia, posso utilizzare il mio piano tariffario senza spendere nulla? nGrazie"},
-        {"text": "@Op1 √à prevista qualche offerta con almeno 10GB con uno costo di attivazione inferiore?"},
-        {"text": "Cara @Op1 impossibile da tempo parlare con vs operatore e sto pagando giochi nn richiesti ¬†nPasso alla concorrenza o mi contattate subito?"},
-        {"text": "@Op1 sono senza linea (cellulare) da ieri.Posso usare solo il wifi di casa ma non posso n√© chiamare n√© ricevere. Numero mandato in DM"}]
+# dataset = [
+#         {"text": "@Op1 buongiorno ho scritto ieri un dm nessuna risposta!"},
+#         {"text": "@Op1 voglio dire grazie pubblicamente al vostro operatore xxxxxxx (lavorava ieri pomer.) che in due minuti ha risolto tutto. Tks"},
+#         {"text": "@Op1 buongiorno sto partendo per le Grecia, posso utilizzare il mio piano tariffario senza spendere nulla? nGrazie"},
+#         {"text": "@Op1 √à prevista qualche offerta con almeno 10GB con uno costo di attivazione inferiore?"},
+#         {"text": "Cara @Op1 impossibile da tempo parlare con vs operatore e sto pagando giochi nn richiesti ¬†nPasso alla concorrenza o mi contattate subito?"},
+#         {"text": "@Op1 sono senza linea (cellulare) da ieri.Posso usare solo il wifi di casa ma non posso n√© chiamare n√© ricevere. Numero mandato in DM"}]
+# for tweet in dataset:
+# 	tweet_vector = FeatureExtractor(cfg["irrelevant"], "en", tweet)
+# 	tweet_vectors = tweet_vectors.append(tweet_vector.data_vector)
 
-
-tweet_vectors = []
-for tweet in dataset:
-	print(tweet['text'])
+data_reader = pd.read_csv('../data/trainingset_450.csv', encoding = "utf-8")
+print(data_reader)
+print(data_reader['text'][0])
+tweet_vectors = pd.DataFrame()
+for index, row in data_reader.iterrows():
+	tweet = {"text":data_reader['text'][index]}
 	tweet_vector = FeatureExtractor(cfg["irrelevant"], "en", tweet)
-	tweet_vectors.append(tweet_vector.data_vector)
+	tweet_vectors = tweet_vectors.append(tweet_vector.data_vector)
+
+tweet_vectors = tweet_vectors.reset_index(drop=True)
 print(tweet_vectors)
+tweet_vectors.to_csv('result_vectors.csv')
+
+
+
 
 
 
