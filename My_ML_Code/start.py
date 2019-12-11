@@ -3,6 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
+from sklearn import preprocessing
 from time import time
 import csv
 from mpl_toolkits.mplot3d import Axes3D
@@ -51,7 +52,9 @@ def plot_embedding_3D(data,label,title):
     return fig
 
 def main():
-    X_train, Y_train = get_data(path = 'data/trainingset.csv')
+    X_train, Y_train = get_data(path = '../data/trainingset.csv')
+    X_train = preprocessing.normalize(X_train, norm='l1')
+
     print('Computing t-SNE embedding')
     tsne = TSNE(n_components=2, init='pca', random_state=0)
     t0 = time()
