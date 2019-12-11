@@ -7,7 +7,7 @@ from time import time
 import csv
 from mpl_toolkits.mplot3d import Axes3D
 
-
+#GET X MATRIX AND Y MARTIX
 def get_data(path):
     dataFile = open(path, 'r')
     lines = csv.reader(dataFile)
@@ -25,16 +25,26 @@ def get_data(path):
 
     return X, Y
 
-
-def plot_embedding(data,label,title):
+#PLOT DATA
+def plot_embedding_2D(data,label,title):
     x_min,x_max = np.min(data, 0), np.max(data, 0)
     data = (data - x_min) / (x_max-x_min)
     fig  = plt.figure()
-    # ax1 = plt.axes(projection='3d')#3D
     ax = plt.subplot(111)
     for i in range(data.shape[0]):
-        # ax1.scatter(data[i,0], data[i,1], data[i,2],color = plt.cm.Set1(label[i]))#3D
-        plt.plot(data[i, 0], data[i, 1],'o', color = plt.cm.Set1(label[i]))#2D
+        plt.plot(data[i, 0], data[i, 1],'o', color = plt.cm.Set1(label[i]))
+    plt.xticks([])
+    plt.yticks([])
+    plt.title(title)
+    return fig
+
+def plot_embedding_3D(data,label,title):
+    x_min,x_max = np.min(data, 0), np.max(data, 0)
+    data = (data - x_min) / (x_max-x_min)
+    fig  = plt.figure()
+    ax1 = plt.axes(projection='3d')
+    for i in range(data.shape[0]):
+        ax1.scatter(data[i,0], data[i,1], data[i,2],color = plt.cm.Set1(label[i]))#3D
     plt.xticks([])
     plt.yticks([])
     plt.title(title)
@@ -46,14 +56,12 @@ def main():
     tsne = TSNE(n_components=2, init='pca', random_state=0)
     t0 = time()
     result = tsne.fit_transform(X_train)
-    fig = plot_embedding(result, Y_train,
+    fig = plot_embedding_2D(result, Y_train,
                          't-SNE embedding of the digits (time %.2fs)'
                          % (time() - t0))
     plt.show(fig)
 
 
 if __name__ == '__main__':
-    # train_X, train_Y = get_data(path = 'data/trainingset.csv')
-    # print(train_X[1:5])
-    # print(train_Y[1:5])
     main()
+
