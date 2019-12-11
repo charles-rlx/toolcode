@@ -1,5 +1,7 @@
 import sklearn.linear_model as sk_linear
 from sklearn.metrics import f1_score
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import classification_report
 import csv
 
 
@@ -20,7 +22,6 @@ def get_data(path):
 
     return X, Y
 
-
 	#training part:
 X_train, Y_train = get_data(path = '../data/trainingset.csv')
 X_cross, Y_cross = get_data(path = '../data/crossset.csv')
@@ -30,7 +31,7 @@ model.fit(X_train,Y_train)
 
 #f1 score in crossset:
 Y_pred = model.predict(X_cross)
-print("crossset f1 score:"+str(f1_score(Y_cross, Y_pred, average='micro')))
+print("crossset f1 score:"+str(f1_score(Y_cross, Y_pred)))
 #f1 score in testset:
 Y_pred_test = model.predict(X_test)
-print("testset f1 score:"+str(f1_score(Y_test, Y_pred_test, average='micro')))
+print("crossset f1 score:"+str(f1_score(Y_test, Y_pred_test)))
