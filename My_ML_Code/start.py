@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 from sklearn import preprocessing
+from sklearn import linear_model
+
 from time import time
 import csv
 from mpl_toolkits.mplot3d import Axes3D
@@ -52,6 +54,31 @@ def plot_embedding_3D(data,label,title):
     plt.title(title)
     return fig
 
+def get_model(X_train,Y_train):
+    model = linear_model.LogisticRegression(penalty='l2',dual=False,C=1.0,n_jobs=1,random_state=20,fit_intercept=True, solver='newton-cg', max_iter=1000, tol=0.00001)
+    model.fit(X_train,Y_train)
+
+    return model
+
+def draw_decision_boundary(X, y,):
+    model = get_model(X, y)
+    fig  = plt.figure()
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    step = 0.02
+    x_min_max, y_min_max = np.meshgrid(np.arange(x_min, x_max, step),np.arange(y_min, y_max, step))
+    
+    Z = model.predict(np.c_[x_min_max.ravel(), y_min_max.ravel()])
+    Z = Z.reshape(x_min_max.shape)
+    cs = plt.contourf(x_min_max, y_min_max, Z, cmap=plt.cm.Paired)
+    plt.axis("tight")
+
+    for i in range(X.shape[0]):
+        plt.scatter(X[i, 0], X[i, 1], color=plt.cm.Set1(y[i]), cmap=plt.cm.Paired, s=20, edgecolor='k')
+    plt.title('Decision Boundary')
+    return fig
+
+
 def square(x):
     return x**2
 
@@ -78,21 +105,22 @@ def addDimensional(X):
 
 def main():
     X_train, Y_train = get_data(path = '../data/trainingset.csv')
-    print(X_train[0:10])
+    X_test, Y_test = get_data(path = '../data/crossset.csv')
     X_train = preprocessing.normalize(X_train, norm='l1')
-    print(X_train[0:10])
+    # model = get_model(X_train, Y_train)
     print('Computing t-SNE embedding')
     tsne = TSNE(n_components=2, init='pca', random_state=0)
     t0 = time()
     result = tsne.fit_transform(X_train)
-    fig = plot_embedding_2D(result, Y_train,
-                         't-SNE embedding of the digits (time %.2fs)'
-                         % (time() - t0))
-    plt.show(fig)
+    # fig = plot_embedding_2D(result, Y_train,'t-SNE embedding of the digits (time %.2fs)' % (time() - t0))
+    # plt.show(fig)
+    plt.show(draw_decision_boundary(result, Y_train))
 
-# 
+
+
 if __name__ == '__main__':
-    a = addDimensional([[1,2,3],[4, 5, 6]])
+    # a = addDimensional([[1,2,3],[4, 5, 6]])
+    main()
     # print(a)
 
 

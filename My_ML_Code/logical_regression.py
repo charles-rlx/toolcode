@@ -78,3 +78,4 @@ print(f1(Y_cross, Y_pred))
 
 fig = plot_precision_recall_curve(estimator=model, X=X_train, y=Y_train, sample_weight=None, response_method='auto')
 plt.show(fig)
+
