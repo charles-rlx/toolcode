@@ -8,6 +8,7 @@ from time import time
 import csv
 from mpl_toolkits.mplot3d import Axes3D
 
+
 #GET X MATRIX AND Y MARTIX
 def get_data(path):
     dataFile = open(path, 'r')
@@ -51,10 +52,35 @@ def plot_embedding_3D(data,label,title):
     plt.title(title)
     return fig
 
+def square(x):
+    return x**2
+
+def listMulti(list, x):
+    for i in range(len(list)):
+        list[i]=list[i]*x
+
+    return list
+
+def addDimensional(X):
+    X_new=[]
+    X_shape=np.shape(X)
+    for x in X:
+        temp_x = list(map(square,x))
+        for l in range(0,X_shape[1]):
+            if len(x[l+1:]) == 0:
+                break
+            else:
+                temp_x = temp_x+listMulti(x[l+1:],x[l])
+        x = x+temp_x
+        X_new.append(x)
+    return X_new
+    
+
 def main():
     X_train, Y_train = get_data(path = '../data/trainingset.csv')
+    print(X_train[0:10])
     X_train = preprocessing.normalize(X_train, norm='l1')
-
+    print(X_train[0:10])
     print('Computing t-SNE embedding')
     tsne = TSNE(n_components=2, init='pca', random_state=0)
     t0 = time()
@@ -64,7 +90,9 @@ def main():
                          % (time() - t0))
     plt.show(fig)
 
-
+# 
 if __name__ == '__main__':
-    main()
+    a = addDimensional([[1,2,3],[4, 5, 6]])
+    # print(a)
+
 
