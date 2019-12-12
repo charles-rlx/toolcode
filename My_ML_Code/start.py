@@ -102,6 +102,23 @@ def addDimensional(X):
         X_new.append(x)
     return X_new
     
+def f1(arr_true, arr_pred):
+    TP, FP, FN, TN = 0, 0, 0, 0
+    for i in range(len(arr_true)):      
+        if arr_pred[i] == 1:
+            if arr_true[i] == 1:
+                TP+=1
+            else:
+                FP+=1 
+        else:
+            if arr_true[i] == 1:
+                FN+=1
+            else:
+                TN+=1
+    Precision = TP / (TP + FP)
+    Recall = TP / (TP + FN)
+    F = Precision * Recall * 2 / (Precision + Recall)
+    return Precision, Recall, F
 
 def main():
     X_train, Y_train = get_data(path = '../data/trainingset.csv')
