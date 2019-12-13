@@ -5,6 +5,8 @@ import models
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
+from sklearn.model_selection import validation_curve
+from sklearn.svm import SVC
 
 # draw 2D figure
 def plot_embedding_2D(data,label,title):
@@ -71,4 +73,33 @@ def f1(arr_true, arr_pred):
     Recall = TP / (TP + FN)
     F = Precision * Recall * 2 / (Precision + Recall)
     return {"Precision":Precision, "Recall":Recall, "F1":F}
+
+def plot_valication_curve(X, y):
+	params_range = np.arange(1,100)
+	# train_scores, test_scores = validation_curve(SVC(), X, y,"C", params_range)
+	train_scores, test_scores = validation_curve(SVC(), X, y,"C", params_range, cv=10, scoring='recall')
+	
+	# print(train_scores)
+	# print(test_scores)
+	train_scores_mean = np.mean(train_scores, axis=1)
+	train_scores_std = np.std(train_scores, axis=1)
+	test_scores_mean = np.mean(test_scores, axis=1)
+	test_scores_std = np.std(test_scores, axis=1)
+	plt.title("Validation Curve with SVM")
+	plt.xlabel(r"$\gamma$")
+	plt.ylabel("Score")
+	plt.ylim(0.0, 1.1)
+	lw = 2
+	plt.semilogx(params_range, train_scores_mean, label="Training score",
+	             color="darkorange", lw=lw)
+	plt.fill_between(params_range, train_scores_mean - train_scores_std,
+	                 train_scores_mean + train_scores_std, alpha=0.2,
+	                 color="darkorange", lw=lw)
+	plt.semilogx(params_range, test_scores_mean, label="Cross-validation score",
+	             color="navy", lw=lw)
+	plt.fill_between(params_range, test_scores_mean - test_scores_std,
+	                 test_scores_mean + test_scores_std, alpha=0.2,
+	                 color="navy", lw=lw)
+	plt.legend(loc="best")
+	plt.show()
 
