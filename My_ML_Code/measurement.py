@@ -36,7 +36,7 @@ def plot_embedding_3D(data,label,title):
 def draw_decision_boundary_2D(X, y, X_cross, y_cross):
     X = dataprocess.changeDataDimensional(X, 2)
     X_cross = dataprocess.changeDataDimensional(X_cross, 2)
-    model, fig_pr = models.model_liner_logistic_regression(X, y)
+    model, fig_pr = models.model_SVC(X, y)
     fig  = plt.figure()
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
