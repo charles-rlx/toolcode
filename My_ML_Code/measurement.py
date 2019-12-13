@@ -75,9 +75,9 @@ def f1(arr_true, arr_pred):
     return {"Precision":Precision, "Recall":Recall, "F1":F}
 
 def plot_valication_curve(X, y):
-	params_range = np.arange(1,100)
+	params_range = np.arange(1,1000)
 	# train_scores, test_scores = validation_curve(SVC(), X, y,"C", params_range)
-	train_scores, test_scores = validation_curve(SVC(), X, y,"C", params_range, cv=10, scoring='recall')
+	train_scores, test_scores = validation_curve(SVC(gamma='auto', kernel='rbf', C=140, decision_function_shape='ovo', tol=1e-3), X, y,"C", params_range, cv=2, scoring='f1')
 	
 	# print(train_scores)
 	# print(test_scores)
@@ -90,16 +90,23 @@ def plot_valication_curve(X, y):
 	plt.ylabel("Score")
 	plt.ylim(0.0, 1.1)
 	lw = 2
-	plt.semilogx(params_range, train_scores_mean, label="Training score",
+	plt.plot(params_range, train_scores_mean, label="Training score",
 	             color="darkorange", lw=lw)
-	plt.fill_between(params_range, train_scores_mean - train_scores_std,
-	                 train_scores_mean + train_scores_std, alpha=0.2,
-	                 color="darkorange", lw=lw)
-	plt.semilogx(params_range, test_scores_mean, label="Cross-validation score",
+	plt.plot(params_range, test_scores_mean, label="Cross-validation score",
 	             color="navy", lw=lw)
-	plt.fill_between(params_range, test_scores_mean - test_scores_std,
-	                 test_scores_mean + test_scores_std, alpha=0.2,
-	                 color="navy", lw=lw)
+	plt.plot(params_range, train_scores_mean-test_scores_mean, label="cut",
+	             color="red", lw=lw)
+	# plt.semilogx(params_range, train_scores_mean, label="Training score",
+	#              color="darkorange", lw=lw)
+	# plt.fill_between(params_range, train_scores_mean - train_scores_std,
+	#                  train_scores_mean + train_scores_std, alpha=0.2,
+	#                  color="darkorange", lw=lw)
+	# plt.semilogx(params_range, test_scores_mean, label="Cross-validation score",
+	#              color="navy", lw=lw)
+	# plt.fill_between(params_range, test_scores_mean - test_scores_std,
+	#                  test_scores_mean + test_scores_std, alpha=0.2,
+	#                  color="navy", lw=lw)
+
 	plt.legend(loc="best")
 	plt.show()
 
