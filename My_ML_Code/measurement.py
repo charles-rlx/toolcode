@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.model_selection import validation_curve
+from sklearn.model_selection import learning_curve
 from sklearn.svm import SVC
+import sklearn.gaussian_process.GaussianProcessClassifier as GP_C
 
 # draw 2D figure
 def plot_embedding_2D(data,label,title):
@@ -75,10 +77,13 @@ def f1(arr_true, arr_pred):
     return {"Precision":Precision, "Recall":Recall, "F1":F}
 
 def plot_valication_curve(X, y):
-	params_range = np.arange(1,1000)
-	# train_scores, test_scores = validation_curve(SVC(), X, y,"C", params_range)
-	train_scores, test_scores = validation_curve(SVC(gamma='auto', kernel='rbf', C=140, decision_function_shape='ovo', tol=1e-3), X, y,"C", params_range, cv=2, scoring='f1')
+    #---------For SVC-------------
+	# params_range = np.arange(1,200)
+	# train_scores, test_scores = validation_curve(SVC(gamma='auto', kernel='rbf', decision_function_shape='ovo', tol=1e-3), X, y,"C", params_range, cv=4, scoring='f1')
 	
+    #--------For GaussianProcessClassifier --------------
+    params_range = np.arange(1,200)
+    train_scores, test_scores = validation_curve(GP_C(multi_class = 'one_vs_one'), X, y, "max_iter_predict", params_range, cv=4, scoring='f1')
 	# print(train_scores)
 	# print(test_scores)
 	train_scores_mean = np.mean(train_scores, axis=1)
@@ -106,7 +111,55 @@ def plot_valication_curve(X, y):
 	# plt.fill_between(params_range, test_scores_mean - test_scores_std,
 	#                  test_scores_mean + test_scores_std, alpha=0.2,
 	#                  color="navy", lw=lw)
-
 	plt.legend(loc="best")
 	plt.show()
+
+def plot_learning_curve(X,y):
+    train_sizes = [0.1,0.33,0.66,1.0]
+    train_sizes, train_scores, test_scores= learning_curve(SVC(gamma='auto', kernel='rbf', C = 30, decision_function_shape='ovo', tol=1e-3), X, y,train_sizes=train_sizes, cv=4, scoring='f1')
+
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+
+    plt.grid()
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std,
+                         train_scores_mean + train_scores_std, alpha=0.1,
+                         color="r")
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std,
+                         test_scores_mean + test_scores_std, alpha=0.1,
+                         color="g")
+    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",
+                 label="Training score")
+    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",
+                 label="Cross-validation score")
+    plt.legend(loc="best")
+    plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
