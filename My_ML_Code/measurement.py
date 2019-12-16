@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from sklearn.model_selection import validation_curve
 from sklearn.model_selection import learning_curve
 from sklearn.svm import SVC
-import sklearn.gaussian_process.GaussianProcessClassifier as GP_C
+# import sklearn.gaussian_process.GaussianProcessClassifier as GP_C
 
 # draw 2D figure
 def plot_embedding_2D(data,label,title):
@@ -78,41 +78,41 @@ def f1(arr_true, arr_pred):
 
 def plot_valication_curve(X, y):
     #---------For SVC-------------
-	# params_range = np.arange(1,200)
-	# train_scores, test_scores = validation_curve(SVC(gamma='auto', kernel='rbf', decision_function_shape='ovo', tol=1e-3), X, y,"C", params_range, cv=4, scoring='f1')
-	
-    #--------For GaussianProcessClassifier --------------
     params_range = np.arange(1,200)
-    train_scores, test_scores = validation_curve(GP_C(multi_class = 'one_vs_one'), X, y, "max_iter_predict", params_range, cv=4, scoring='f1')
-	# print(train_scores)
-	# print(test_scores)
-	train_scores_mean = np.mean(train_scores, axis=1)
-	train_scores_std = np.std(train_scores, axis=1)
-	test_scores_mean = np.mean(test_scores, axis=1)
-	test_scores_std = np.std(test_scores, axis=1)
-	plt.title("Validation Curve with SVM")
-	plt.xlabel(r"$\gamma$")
-	plt.ylabel("Score")
-	plt.ylim(0.0, 1.1)
-	lw = 2
-	plt.plot(params_range, train_scores_mean, label="Training score",
-	             color="darkorange", lw=lw)
-	plt.plot(params_range, test_scores_mean, label="Cross-validation score",
-	             color="navy", lw=lw)
-	plt.plot(params_range, train_scores_mean-test_scores_mean, label="cut",
-	             color="red", lw=lw)
-	# plt.semilogx(params_range, train_scores_mean, label="Training score",
-	#              color="darkorange", lw=lw)
-	# plt.fill_between(params_range, train_scores_mean - train_scores_std,
-	#                  train_scores_mean + train_scores_std, alpha=0.2,
-	#                  color="darkorange", lw=lw)
-	# plt.semilogx(params_range, test_scores_mean, label="Cross-validation score",
-	#              color="navy", lw=lw)
-	# plt.fill_between(params_range, test_scores_mean - test_scores_std,
-	#                  test_scores_mean + test_scores_std, alpha=0.2,
-	#                  color="navy", lw=lw)
-	plt.legend(loc="best")
-	plt.show()
+    train_scores, test_scores = validation_curve(SVC(gamma='auto', kernel='sigmoid', decision_function_shape='ovo', tol=1e-3), X, y,"C", params_range, cv=4, scoring='f1')
+    
+    #--------For GaussianProcessClassifier --------------
+    # params_range = np.arange(1,200)
+    # train_scores, test_scores = validation_curve(GP_C(multi_class = 'one_vs_one'), X, y, "max_iter_predict", params_range, cv=4, scoring='f1')
+    # print(train_scores)
+    # print(test_scores)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    plt.title("Validation Curve with SVM")
+    plt.xlabel(r"$\gamma$")
+    plt.ylabel("Score")
+    plt.ylim(0.0, 1.1)
+    lw = 2
+    plt.plot(params_range, train_scores_mean, label="Training score",
+                 color="darkorange", lw=lw)
+    plt.plot(params_range, test_scores_mean, label="Cross-validation score",
+                 color="navy", lw=lw)
+    plt.plot(params_range, train_scores_mean-test_scores_mean, label="cut",
+                 color="red", lw=lw)
+    # plt.semilogx(params_range, train_scores_mean, label="Training score",
+    #              color="darkorange", lw=lw)
+    # plt.fill_between(params_range, train_scores_mean - train_scores_std,
+    #                  train_scores_mean + train_scores_std, alpha=0.2,
+    #                  color="darkorange", lw=lw)
+    # plt.semilogx(params_range, test_scores_mean, label="Cross-validation score",
+    #              color="navy", lw=lw)
+    # plt.fill_between(params_range, test_scores_mean - test_scores_std,
+    #                  test_scores_mean + test_scores_std, alpha=0.2,
+    #                  color="navy", lw=lw)
+    plt.legend(loc="best")
+    plt.show()
 
 def plot_learning_curve(X,y):
     train_sizes = [0.1,0.33,0.66,1.0]
