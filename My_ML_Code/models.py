@@ -13,7 +13,7 @@ def model_liner_logistic_regression(X_train, Y_train):
 
 #SVC
 def model_SVC(X_train, Y_train):
-	model_SVC = SVC(gamma='auto', kernel='rbf', C=40, decision_function_shape='ovo', tol=1e-3)
+	model_SVC = SVC(gamma=0.007, kernel='rbf', C=20, decision_function_shape='ovo', tol=1e-3)
 	model_SVC.fit(X_train, Y_train)
 	# fig = plot_precision_recall_curve(estimator=model_SVC, X=X_train, y=Y_train, sample_weight=None, response_method='auto')
 	return model_SVC

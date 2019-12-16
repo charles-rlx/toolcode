@@ -50,6 +50,9 @@ def changeDataDimensional(X, dim):
     result = tsne.fit_transform(X)
     return result
 
+def nor(X):
+    X_normalized = preprocessing.normalize(X, norm='l2')
+    return X_normalized
 
 
 if __name__ == '__main__':
