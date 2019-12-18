@@ -8,6 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from sklearn.model_selection import validation_curve
 from sklearn.model_selection import learning_curve
 from sklearn.svm import SVC
+from sklearn.grid_search import GridSearchCV
 # import sklearn.gaussian_process.GaussianProcessClassifier as GP_C
 
 # draw 2D figure
@@ -139,8 +140,20 @@ def plot_learning_curve(X,y):
 
 
 
+def f1_present(arr_true, arr_pred):
+    result = f1(arr_true, arr_pred)
+    print("##################")
+    print("precision: "+ str(result['Precision']))
+    print("Recall: "+ str(result['Recall']))
+    print("F1: "+ str(result['F1']))
+    print("TP:"+str(result['TP'])+"  "+"FP:"+str(result['FP'])+"  "+"FN:"+str(result['FN'])+"  "+"TN:"+str(result['TN']))
+    # print("##################")
 
-
+def grid_search(X,y):
+    param_grid = {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf'], decision_function_shape:['ovo'], tol:[1e-3]}
+    grid=GridSearchCV(SVC(),param_grid=param_grid,cv=5, scoring = 'f1')
+    grid.fit(X,y)
+    grid.grid_scores_,grid.best_params_,grid.best_score_
 
 
 
