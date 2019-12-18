@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from sklearn.model_selection import validation_curve
 from sklearn.model_selection import learning_curve
 from sklearn.svm import SVC
-from sklearn.grid_search import GridSearchCV
+# from sklearn.grid_search import GridSearchCV
 # import sklearn.gaussian_process.GaussianProcessClassifier as GP_C
 
 # draw 2D figure
@@ -79,14 +79,13 @@ def f1(arr_true, arr_pred):
 
 def plot_valication_curve(X, y):
     #---------For SVC-------------
-    params_range = np.arange(1,200)
-    train_scores, test_scores = validation_curve(SVC(gamma='auto', kernel='sigmoid', decision_function_shape='ovo', tol=1e-3), X, y,"C", params_range, cv=4, scoring='f1')
+    params_range = np.arange(0.5,10,0.5)
+    # model_SVC = SVC(gamma=0.7, kernel='rbf', C=1, decision_function_shape='ovr', tol=1e-6, probability=True, class_weight ={0:.7,1:.3})
     
-    #--------For GaussianProcessClassifier --------------
-    # params_range = np.arange(1,200)
-    # train_scores, test_scores = validation_curve(GP_C(multi_class = 'one_vs_one'), X, y, "max_iter_predict", params_range, cv=4, scoring='f1')
-    # print(train_scores)
-    # print(test_scores)
+    # model =SVC(C=1,kernel='rbf', decision_function_shape='ovr', tol=1e-6, probability=True,class_weight ={0:.7,1:.3})
+    model = SVC(gamma=0.09, kernel='rbf', decision_function_shape='ovr', tol=1e-6, probability=True, class_weight ={0:.7,1:.3})
+    train_scores, test_scores = validation_curve(model,X, y,"C", params_range, cv=4, scoring='f1')
+    
     train_scores_mean = np.mean(train_scores, axis=1)
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
@@ -116,8 +115,10 @@ def plot_valication_curve(X, y):
     plt.show()
 
 def plot_learning_curve(X,y):
-    train_sizes = [0.1,0.33,0.66,1.0]
-    train_sizes, train_scores, test_scores= learning_curve(SVC(gamma='auto', kernel='rbf', C = 30, decision_function_shape='ovo', tol=1e-3), X, y,train_sizes=train_sizes, cv=4, scoring='f1')
+    # train_sizes = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
+    train_sizes = np.arange(0.05,1,0.01)
+    train_sizes, train_scores, test_scores= learning_curve(SVC(gamma=1, kernel='rbf', C=1, decision_function_shape='ovr', tol=1e-6, probability=True, class_weight ={0:.7,1:.3}),
+     X, y,train_sizes=train_sizes, cv=4, scoring='roc_auc')
 
     train_scores_mean = np.mean(train_scores, axis=1)
     train_scores_std = np.std(train_scores, axis=1)
